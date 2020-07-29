@@ -1,0 +1,28 @@
+{
+    "name": "andrewk777/oadspa",
+    "description": "Initial setup of laravel for spa development by OAD SOFT",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrew Korneychuk",
+            "email": "andrew@oadsoft.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "laravel/sanctum": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "OADSOFT\\SPA\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OADSOFT\\SPA\\OADServiceProvider"
+            ]
+        }
+    },
+}
