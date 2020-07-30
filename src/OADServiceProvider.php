@@ -15,10 +15,10 @@ class OADServiceProvider extends ServiceProvider {
         $this->loadViewsFrom(__DIR__ . '/views' , 'oadspa');
 
         //deleting default migrations
-        $migration_files = array_diff(scandir(database_path()), array('..', '.'));
+        $migration_files = array_diff(scandir(database_path('migrations')), array('..', '.'));
         foreach ($migration_files as $file_name) {
             if (strstr($file_name,'users_table')) {
-                unlink(database_path($file_name));
+                unlink(database_path('migrations/' . $file_name));
             }
         }
 
@@ -27,6 +27,9 @@ class OADServiceProvider extends ServiceProvider {
 
         // deleting default User Model File
         if (file_exists(app_path('User.php'))) unlink(app_path('User.php'));
+
+        // deleting default User Model File
+        if (file_exists(config_path('auth.php'))) unlink(config_path('auth.php'));
 
         $this->publishes([
             __DIR__.'/Commands' => app_path('Console/Commands'),
