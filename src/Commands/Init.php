@@ -13,7 +13,7 @@ class Init extends Command
      *
      * @var string
      */
-    protected $signature    = 'oad:init {oad_command}';
+    protected $signature    = 'oad {oad_command}';
 
     /**
      * The console command description.
@@ -51,20 +51,17 @@ class Init extends Command
             case 'dropTables':
                 $this->dropTables();
             break;
+            case 'genenv':
+                $this->genenv();
+            break;
             case 'genVueRoutes':
                 $this->genVueRoutes();
             break;
         }    
 
-         $this->call('migrate');
-
-         $this->call('db:seed',['--class' => 'InitSeeder']);
-         $this->call('vue:genRoutes');
-         \Artisan::call('config:cache');
-
      }
 
-     public function dropTables() {
+     private function dropTables() {
 
         $colname = 'Tables_in_' . config('database.connections.mysql.database');
         $droplist = [];
@@ -83,12 +80,17 @@ class Init extends Command
        
      }
 
-     public function seed() {
+     private function seed() {
         $this->call('migrate');
         $this->info('Migration done');
         $this->call('db:seed',['--class' => 'InitSeeder']);
         $this->info('Seeding Done');
         $this->genVueRoutes();
+     }
+
+     private function genenv() {
+        $json = file_get_contents(base_path('oad-conf.json'));
+        file_put_contents(base_path('.env'), View::make('oadspa::console.env', json_decode($json) ));
      }
 
      private function genVueRoutes() {
@@ -100,9 +102,9 @@ class Init extends Command
        });
        $appDefaultUrl = array_values($default->toArray())[0]->path;
 
-        file_put_contents('resources/js/routes.js', View::make('console.viewRouter', [ 'backendRoutes' => $routes ] ));
-        file_put_contents('resources/js/config.js', View::make('console.condfigjs', [ 'appDefaultUrl' => $appDefaultUrl ]));
-
+        file_put_contents(resource_path('js/routes.js'), View::make('console.viewRouter', [ 'backendRoutes' => $routes ] ));
+        file_put_contents(resource_path('js/config.js'), View::make('console.condfigjs', [ 'appDefaultUrl' => $appDefaultUrl ]));
+        
         $this->info('Vue Routes Generated');
         
      }

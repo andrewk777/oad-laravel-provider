@@ -10,8 +10,6 @@ class OADServiceProvider extends ServiceProvider {
 
         //delete .env and .env.example
         //create and populate new .env
-        //call "key:generate"
-        //$this->call('config:clear');
 
         //loading web and api routes
         $this->loadRoutesFrom(__DIR__.'/routes.php');
@@ -26,6 +24,10 @@ class OADServiceProvider extends ServiceProvider {
                 unlink(database_path($file_name));
             }
         }
+
+        //deleting default files
+        unlink(base_path('.env'));
+        unlink(base_path('.env.example'));
 
         // deleting default User Model File
         if (file_exists(app_path('User.php'))) { 
@@ -45,15 +47,6 @@ class OADServiceProvider extends ServiceProvider {
 
         //updating auth config to use a proper user model
         config(['auth.providers.users.model' => App\Models\User::class ]);
-
-        
-        //run migrations
-        //run seeder
-        //copy js files
-        //generate vue router
-        //run npm install
-        
-
 
     }
 
