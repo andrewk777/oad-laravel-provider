@@ -34,6 +34,18 @@ class OADServiceProvider extends ServiceProvider {
             // deleting default User Model File
             if (file_exists(config_path('auth.php'))) unlink(config_path('auth.php'));
 
+            $content = \File::get(config_path('app.php'));
+            $content = str_replace(
+                "'View' => Illuminate\Support\Facades\View::class,",
+                "'View' => Illuminate\Support\Facades\View::class,". PHP_EOL .
+                "        'Carbon' => Carbon\Carbon::class," . PHP_EOL .
+                "        'Field' => App\Models\OAD\Field::class," . PHP_EOL .
+                "        'Uuid' => Webpatser\Uuid\Uuid::class," . PHP_EOL .
+                "        'User' => App\Models\User::class,",
+                $content
+            );
+            \File::put(config_path('app.php'),$content);
+
         }
 
         $this->publishes([
