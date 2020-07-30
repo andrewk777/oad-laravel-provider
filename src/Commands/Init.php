@@ -90,7 +90,7 @@ class Init extends Command
 
      private function genenv() {
         $json = file_get_contents(base_path('oad-conf.json'));
-        file_put_contents(base_path('.env'), View::make('oadspa::console.env', json_decode($json) ));
+        file_put_contents(base_path('.env'), View::make('oadspa::console.env', json_decode($json,true )));
      }
 
      private function genVueRoutes() {

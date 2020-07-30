@@ -8,9 +8,6 @@ class OADServiceProvider extends ServiceProvider {
 
     public function boot() {
 
-        //delete .env and .env.example
-        //create and populate new .env
-
         //loading web and api routes
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
@@ -26,7 +23,6 @@ class OADServiceProvider extends ServiceProvider {
         }
 
         //deleting default env files
-        if (file_exists(base_path('.env'))) unlink(base_path('.env'));
         if (file_exists(base_path('.env.example'))) unlink(base_path('.env.example'));
 
         // deleting default User Model File
@@ -41,10 +37,8 @@ class OADServiceProvider extends ServiceProvider {
             __DIR__.'/Models' => app_path('Models'),
             __DIR__.'/Notifications' => app_path('Notifications'),
             __DIR__.'/Traits' => app_path('Traits'),
+            __DIR__.'/config' => config_path(),
         ]);
-
-        //updating auth config to use a proper user model
-        config(['auth.providers.users.model' => App\Models\User::class ]);
 
     }
 
