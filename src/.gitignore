@@ -13,6 +13,7 @@ npm-debug.log
 yarn-error.log
 .DS_Store
 oad-conf.json
+.editorconfig
 /.vscode
 /.history
 /public/js/app.js
