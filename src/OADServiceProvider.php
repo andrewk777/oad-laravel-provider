@@ -25,14 +25,12 @@ class OADServiceProvider extends ServiceProvider {
             }
         }
 
-        //deleting default files
-        unlink(base_path('.env'));
-        unlink(base_path('.env.example'));
+        //deleting default env files
+        if (file_exists(base_path('.env'))) unlink(base_path('.env'));
+        if (file_exists(base_path('.env.example'))) unlink(base_path('.env.example'));
 
         // deleting default User Model File
-        if (file_exists(app_path('User.php'))) { 
-            unlink(app_path('User.php'));
-        }
+        if (file_exists(app_path('User.php'))) unlink(app_path('User.php'));
 
         $this->publishes([
             __DIR__.'/Commands' => app_path('Console/Commands'),
