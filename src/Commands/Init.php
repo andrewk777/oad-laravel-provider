@@ -100,10 +100,10 @@ class Init extends Command
        $default = $routes->filter(function($item) {
            if ($item->default) return $item;
        });
-       $appDefaultUrl = array_values($default->toArray())[0]->path;
+       $appDefaultUrl = array_values($default->toArray())[0]['path'];
 
-        file_put_contents(resource_path('js/routes.js'), View::make('console.viewRouter', [ 'backendRoutes' => $routes ] ));
-        file_put_contents(resource_path('js/config.js'), View::make('console.condfigjs', [ 'appDefaultUrl' => $appDefaultUrl ]));
+       file_put_contents(resource_path('js/routes.js'), View::make('oadspa::console.viewRouter', [ 'backendRoutes' => $routes ] ));
+       file_put_contents(resource_path('js/config.js'), View::make('oadspa::console.condfigjs', [ 'appDefaultUrl' => $appDefaultUrl ]));
         
         $this->info('Vue Routes Generated');
         
