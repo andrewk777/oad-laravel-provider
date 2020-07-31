@@ -23,6 +23,9 @@ class OADServiceProvider extends ServiceProvider {
             //deleting default env files
             if (file_exists(base_path('.env.example'))) unlink(base_path('.env.example'));
 
+            //deleting default blade
+            if (file_exists(resource_path('views/welcome.blade.php'))) unlink(resource_path('views/welcome.blade.php'));
+
             //deleting default migrations
             $migration_files = array_diff(scandir(database_path('migrations')), array('..', '.'));
             foreach ($migration_files as $file_name) {
