@@ -90,7 +90,7 @@ class Init extends Command
 
      private function genenv() {
         $json = file_get_contents(base_path('oad-conf.json'));
-        file_put_contents(base_path('.env'), View::make('oadspa::console.env', json_decode($json,true )));
+        file_put_contents(base_path('.env'), View::make('console.env', json_decode($json,true )));
      }
 
      private function genVueRoutes() {
@@ -102,8 +102,8 @@ class Init extends Command
        });
        $appDefaultUrl = array_values($default->toArray())[0]['path'];
 
-       file_put_contents(resource_path('js/routes.js'), View::make('oadspa::console.viewRouter', [ 'backendRoutes' => $routes ] ));
-       file_put_contents(resource_path('js/config.js'), View::make('oadspa::console.condfigjs', [ 'appDefaultUrl' => $appDefaultUrl ]));
+       file_put_contents(resource_path('js/routes.js'), View::make('console.viewRouter', [ 'backendRoutes' => $routes ] ));
+       file_put_contents(resource_path('js/config.js'), View::make('console.condfigjs', [ 'appDefaultUrl' => $appDefaultUrl ]));
         
         $this->info('Vue Routes Generated');
         

@@ -9,10 +9,7 @@ class OADServiceProvider extends ServiceProvider {
     public function boot() {
 
         //loading web and api routes
-        $this->loadRoutesFrom(__DIR__.'/routes.php');
-
-        //loading views
-        $this->loadViewsFrom(__DIR__ . '/views' , 'oadspa');        
+        $this->loadRoutesFrom(__DIR__.'/routes.php');      
 
         //this should run only once
         if (file_exists(app_path('User.php'))) {
@@ -61,6 +58,7 @@ class OADServiceProvider extends ServiceProvider {
             __DIR__.'/Notifications' => app_path('Notifications'),
             __DIR__.'/Traits' => app_path('Traits'),
             __DIR__.'/config' => config_path(),
+            __DIR__.'/views' => resource_path('views')
         ]);
 
     }

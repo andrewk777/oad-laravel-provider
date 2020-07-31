@@ -2,7 +2,7 @@
 
 //web route - point all requests to this view
 Route::get('/{any?}', function () {
-    return view('oadspa::app');
+    return view('app');
 })->where('any', '^(?!api\/)[\/\w\.-]*');
 
 
