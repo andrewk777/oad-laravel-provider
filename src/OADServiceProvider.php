@@ -9,7 +9,7 @@ class OADServiceProvider extends ServiceProvider {
     public function boot() {
 
         //loading web and api routes
-        $this->loadRoutesFrom(__DIR__.'/routes.php');      
+        $this->loadRoutesFrom(__DIR__.'/routes/routes.php');      
 
         //this should run only once
         if (file_exists(app_path('User.php'))) {
@@ -19,6 +19,9 @@ class OADServiceProvider extends ServiceProvider {
 
             //deleting default env files
             if (file_exists(base_path('.env.example'))) unlink(base_path('.env.example'));
+
+            //deleting default env files
+            if (file_exists(base_path('routes/web.php'))) unlink(base_path('routes/web.php'));
 
             //deleting default blade
             if (file_exists(resource_path('views/welcome.blade.php'))) unlink(resource_path('views/welcome.blade.php'));
@@ -58,7 +61,8 @@ class OADServiceProvider extends ServiceProvider {
             __DIR__.'/Notifications' => app_path('Notifications'),
             __DIR__.'/Traits' => app_path('Traits'),
             __DIR__.'/config' => config_path(),
-            __DIR__.'/views' => resource_path('views')
+            __DIR__.'/views' => resource_path('views'),
+            __DIR__.'/routes/web.php' => base_path('routes/web.php')
         ]);
 
     }
