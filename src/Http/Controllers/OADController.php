@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace OADSOFT\SPA\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\TableHelpers;
-use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Controller;
 
 class OADController extends Controller
 {
@@ -40,18 +40,24 @@ class OADController extends Controller
             [
                 'status'    => 'success',
                 'hash'      => $request->hash,
-                'fields'    => $model->form_fields,
-                'models'    => $modelsNvalues
-            ],
+                'forms'    => [
+                    'main'  => [
+                        'fields'    => $model->form_fields,
+                        'values'    => $modelsNvalues
+                    ]
+                    
+                ]
+            ], 
             200
         );
+
     }
 
     public function store(Request $request) {
 
         $model = $request->hash ? $this->model::where('hash',$request->hash)->first()  : new $this->model();
         
-        $model->validateForm($request->data)
+        $model->validateForm($request->forms)
               ->store([ 'hash' => $request->hash ], $request->data);
 
     }
@@ -95,17 +101,13 @@ class OADController extends Controller
         })->toArray();
     }
 
-    public function export(Request $request) {
+    public function export() {
         $modelName  = explode('\\',$this->model);
         $modelName  = end($modelName);
         $mPath      = 'App\\Exports\\' . $modelName . 'Export';
         $file_name  = $modelName . '-' . date('Y-m-d-h-i-s') . '.xlsx';
         Excel::store(new $mPath(), './tmp/' . $file_name);
         return $file_name;
-    }
-
-    public function clientNameSearch($q,$search) {
-        return $q->orWhereRaw( " CONCAT (clients.first_name, ' ',clients.last_name) LIKE '%" . str_replace("'",'',$search) . "%' ");
     }
 
 }

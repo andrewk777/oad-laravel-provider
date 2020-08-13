@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace OADSOFT\SPA\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\File;
-use App\Models\User;
 
 class FileController extends Controller {
 
@@ -57,23 +56,19 @@ class FileController extends Controller {
         $fileInfo['is_saved'] = $folder ? true : false;
         $fileInfo['path'] = $file->store($folder ? $folder : 'default');
 
-        return File::create($fileInfo);
+        return $this->model::create($fileInfo);
     }
 
-    public function view_file(Request $request, $hash) {
+    public function view_file($hash) {
 
         $file = $this->model::find($hash);
-        $attachment = $file->attachment;
-        if ($attachment instanceof \App\Models\ClientJob) {
-            $user_hash = $request->session()->get('user_hash');
-            $role = User::where('hash', $user_hash)->first()->role;
-            $jobs_permission = $role->items()->where('sections_id', 11)->first();
-
-            if ($role->reviewer != 1 && $jobs_permission && ($jobs_permission->permission == 'none' || $attachment->assigned_to != $user_hash))
-                return 'No Permission';
-
-        }
-        return response()->file(storage_path('app/' . $file->path),['Content-Type'=>$file->mime ,'Content-Disposition' => 'attachment; filename="'. $file->file_name.'"']);
+        
+        return response()->file(
+            storage_path('app/' . $file->path),
+            [
+                'Content-Type'=>$file->mime ,
+                'Content-Disposition' => 'attachment; filename="'. $file->file_name.'"'
+            ]);
     }
 
     public function download_tmp_file($file_name = '') {

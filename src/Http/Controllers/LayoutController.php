@@ -1,87 +1,52 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace OADSOFT\SPA\Http\Controllers;
 
 use Auth;
-use App\Models\User;
-use App\Models\Section;
+use App\Models\OAD\Section;
+use App\Http\Controllers\Controller;
 
 class LayoutController extends Controller
 {
 
     private $check_permissions;
 
-    public function index($check_permissions = true) {
+    public function index($check_permissions = true, $include_secions = false) {
 
         $this->check_permissions = Auth::user()->roles_id == 1 ? false : $check_permissions;
-        return response()->json( $this->menu() );
+
+        return response()->json([
+            'menu_primary'      => $this->primary_menu($check_permissions),
+            'menu_secondary'    => $this->secondary_menu($check_permissions,$include_secions)
+        ]);
     }
 
-    public function menu($section_prefix = 'section_') {
+    public function primary_menu() {
 
-        return $this->gen_tree($section_prefix,['type' => 'menu'], User::get_permissions());
+        return $this->permission_filter(
+            Section::with('routes')->whereNull('parent_id')->where('type','menu')->orderBY('sort_order')->get()
+        );
+                
     }
 
-    public function gen_tree($section_prefix,$where = [], $permissions = []) {
+    public function secondary_menu() {
 
-        $items = Section::with('routes');
-        if (count($where)) $items->where($where);
-        $items = $items->get()->toArray();
+        $sections = $this->permission_filter(
+            Section::with('routes')->whereNotNull('parent_id')->where('type','menu')->orderBY('parent_id')->orderBY('sort_order')->get()
+        );
+        
+        return $sections->groupBy('parent_id');
+    }
 
-		$tree =$this->buildTree($section_prefix,$items,$permissions);
+    private function permission_filter($sections) {
 
-		return $this->sortTree($tree);
-	}
-
-    public function buildTree($section_prefix,array &$elements, $permissions = [], $parentId = 0, $limitReturn = true) {
-
-	    $branch = array();
-	    foreach ($elements as &$element) {
-
-	        if ($element['parent_id'] == $parentId) {
-
-	            $children = $this->buildTree($section_prefix,$elements, $permissions, $element['id'], $limitReturn);
-				$element['children'] = $children ? $children : [];
-                $element['route'] = $element['routes'] ? $element['routes']['path'] : null;
-                $element['access_options'] = $element['access_options'] ? explode(',',$element['access_options']) : [];
-				$element['permission'] = !empty($permissions[$element['id']]) ? $permissions[$element['id']] : [];
-                if ((array_key_exists($element['id'], $permissions) && $permissions[$element['id']] != 'none') || !$this->check_permissions) {
-                    $branch[$section_prefix . $element['id']] = $limitReturn ? [
-                        'id'                => $element['id'],
-                        'text'              => $element['text'],
-                        'cssClass'          => $element['cssClass'],
-                        'route'             => $element['route'],
-                        'access_options'    => $element['access_options'],
-                        'sort_order'        => $element['sort_order'],
-                        'children'          => $element['children']
-                        ] : $element;
-                }
-
-	            unset($element);
-	        }
-	    }
-
-	    return $branch;
-	}
-
-	public function sortTree(&$elements) {
-
-		uasort($elements, function($a,$b) {
-			return $a['sort_order'] <=> $b['sort_order'];
-		});
-
-	    foreach ($elements as &$element) {
-			if ($element['children']) {
-				$element['children'] = $this->sortTree($element['children']);
-			}
-	    }
-
-		return $elements;
-
-	}
-
-    public function sectionsDfltPermissions() {
-        return Section::selectRaw(" 'none' as text, id")->get()->pluck('text','id');
+        if ($this->check_permissions) {
+            $permissions = \User::get_permissions();
+            $sections->filter(function($record) use ($permissions) {
+                return !empty($permissions[$record->id]) && $permissions[$record->id] != 'none';
+            });
+        }
+        return $sections;
     }
 
 }
