@@ -22,6 +22,8 @@ class OADAuth
         if (!$accessToken) {
             return response(null, 401);
         }
+
+        $accessToken->touch();
         
         return $next($request);
     }

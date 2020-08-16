@@ -11,7 +11,7 @@ class LayoutController extends Controller
 
     private $check_permissions;
 
-    public function index($check_permissions = true, $include_secions = false) {
+    public function full_menu($check_permissions = true, $include_secions = false) {
 
         $this->check_permissions = Auth::user()->roles_id == 1 ? false : $check_permissions;
 
@@ -19,6 +19,13 @@ class LayoutController extends Controller
             'menu_primary'      => $this->primary_menu($check_permissions),
             'menu_secondary'    => $this->secondary_menu($check_permissions,$include_secions)
         ]);
+    }
+
+    public function set_permission_filter($val = true) {
+
+        $this->check_permissions = $val;
+        return $this;
+
     }
 
     public function primary_menu() {
@@ -47,6 +54,36 @@ class LayoutController extends Controller
             });
         }
         return $sections;
+    }
+
+    public function sections_tree($parent_id = null) {
+        
+        $items = Section::where('parent_id',$parent_id)->orderBy('sort_order')->get();
+        $permissions = \User::get_permissions();
+
+        if ($items->count()) {
+            
+            return $items->transform(function($item) use ($permissions) {
+
+                if (!$this->check_permissions || (!empty($permissions[$item->id]) && $permissions[$item->id] != 'none' )) {
+
+                    $item->access_options   = collect(explode(',',$item->access_options))->transform(function($item) { 
+                        return [
+                            'code'  => $item,
+                            'label' => ucfirst($item) 
+                        ];
+                    });
+
+                    $item->children         = $this->sections_tree($item->id);
+
+                    return $item;
+
+                }                
+
+            });
+        }
+        
+        return false;
     }
 
 }

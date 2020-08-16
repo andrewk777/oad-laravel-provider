@@ -31,7 +31,7 @@ Route::group(
         'namespace'     => 'App\Http\Controllers\OAD'
     ], function() {
         
-        Route::get('layout', 'LayoutController@index');  
+        Route::get('layout', 'LayoutController@full_menu');  
         Route::post('file-upload', 'FileController@store');
         Route::get('auth-check', 'AuthController@auth_check');
 
