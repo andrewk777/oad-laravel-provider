@@ -77,13 +77,7 @@ class OADController extends Controller
 
         //lookup matching pair for value
         if ($request->hash) {
-
-            return $model->where('hash',$request->hash)->get()->transform(function($item,$key) {
-                return [
-                    'code' => $item['hash'],
-                    'label'  => $item['name']
-                ];
-            });
+            return $model->where('hash',$request->hash)->get()->pluck('name','hash');
         }
 
         //perform search for results
@@ -93,12 +87,7 @@ class OADController extends Controller
         if ($request->clients_id) {
             $model->where('clients_id',$request->clients_id);
         }
-        return $model->limit(10)->orderBy('name')->get()->transform(function($item, $key) {
-            return [
-                'code' => $item['hash'],
-                'label'  => $item['name']
-            ];
-        })->toArray();
+        return $model->limit(10)->orderBy('name')->get()->pluck('name','hash');
     }
 
     public function export() {

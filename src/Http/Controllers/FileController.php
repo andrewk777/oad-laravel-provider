@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class FileController extends Controller {
 
-    protected $model = 'App\Models\File';
+    protected $model = 'App\Models\OAD\File';
 
     public function show(Request $request) {
 
@@ -17,10 +17,10 @@ class FileController extends Controller {
 
         return response()->json(
                         [
-                    'status' => 'success',
-                    'hash' => $request->hash,
-                    'fields' => $model->form_fields,
-                    'models' => $modelsNvalues
+                            'status' => 'success',
+                            'hash' => $request->hash,
+                            'fields' => $model->form_fields,
+                            'models' => $modelsNvalues
                         ], 200
         );
     }
@@ -30,15 +30,16 @@ class FileController extends Controller {
         $return = [];
 
         if (count($request->all())) {
-            foreach ($request->all() as $key => $file) {
+            foreach ($request->all() as $file) {
 
                 $file_name = $file->getClientOriginalName();
+                $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
                 $model = $this->storeFile($file, [
-                    'file_name' => $file_name,
-                    'ext' => pathinfo($file_name, PATHINFO_EXTENSION),
-                    'size' => $file->getClientSize(),
-                    'mime' => $file->getClientMimeType(),
+                    'file_name'     => $file_name,
+                    'ext'           => $ext,
+                    'size'          => $file->getSize(),
+                    'mime'          => $file->getClientMimeType(),
                 ]);
 
                 $return[] = [
@@ -52,30 +53,48 @@ class FileController extends Controller {
     }
 
     public function storeFile($file, $fileInfo = [], $folder = '') {
-
+        
         $fileInfo['is_saved'] = $folder ? true : false;
-        $fileInfo['path'] = $file->store($folder ? $folder : 'default');
+        $fileInfo['path'] = $file->storeAs($folder ? $folder : 'default', \Str::random(40) . '.' . $fileInfo['ext']);
 
         return $this->model::create($fileInfo);
     }
 
-    public function view_file($hash) {
+    public function view($hash, $file_name = '') {
 
         $file = $this->model::find($hash);
-        
+        $file_name = $file_name ? $file_name : $file->file_name;
+
+        $headers = [
+            'Content-Type'          => $file->mime ,
+            'Content-Disposition'   => 'filename="'. $file_name.'"'
+        ];
+
         return response()->file(
-            storage_path('app/' . $file->path),
-            [
-                'Content-Type'=>$file->mime ,
-                'Content-Disposition' => 'attachment; filename="'. $file->file_name.'"'
-            ]);
+            storage_path('app/' . $file->path), $headers
+        );
+        
     }
 
-    public function download_tmp_file($file_name = '') {
-        if ($file_name) {
-            return response()->file(storage_path('app/tmp/' . $file_name))->deleteFileAfterSend(true);
-        }
-        return 'No File Found';
+    public function download($hash, $file_name = '') {
+
+        $file = $this->model::find($hash);
+        $file_name = $file_name ? $file_name : $file->file_name;
+
+        $headers = [
+            'Content-Type'          => $file->mime ,
+            'Content-Disposition'   => 'attachment; filename="'. $file_name.'"'
+        ];
+
+        return response()->download(storage_path('app/' . $file->path), $file_name, $headers);
+    }
+
+    public function delete(Request $request) {
+
+        $this->model::find($request->hash)->delete();
+
+        return response()->json([ 'status' => 'success', 'res' => 'File Has Been Deleted']);
+
     }
 
 }

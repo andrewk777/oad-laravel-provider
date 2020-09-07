@@ -67,11 +67,8 @@ class LayoutController extends Controller
 
                 if (!$this->check_permissions || (!empty($permissions[$item->id]) && $permissions[$item->id] != 'none' )) {
 
-                    $item->access_options   = collect(explode(',',$item->access_options))->transform(function($item) { 
-                        return [
-                            'code'  => $item,
-                            'label' => ucfirst($item) 
-                        ];
+                    $item->access_options   = collect(explode(',',$item->access_options))->mapWithKeys(function($item) { 
+                        return [$item => ucfirst($item) ];
                     });
 
                     $item->children         = $this->sections_tree($item->id);

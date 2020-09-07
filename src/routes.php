@@ -20,6 +20,9 @@ Route::group(
 
         //update passwords
         Route::post('resetPasswordComplete', 'AuthController@resetPasswordComplete'); //submit new password
+
+        Route::get('view_file/{hash}/{name?}', 'FileController@view')->where('hash', '([a-zA-Z0-9\-]+)');
+        Route::get('download_file/{hash}/{name?}', 'FileController@download')->where('hash', '([a-zA-Z0-9\-]+)');
         
 });
 
@@ -33,6 +36,7 @@ Route::group(
         
         Route::get('layout', 'LayoutController@full_menu');  
         Route::post('file-upload', 'FileController@store');
+        Route::post('file-delete', 'FileController@delete');
         Route::get('auth-check', 'AuthController@auth_check');
 
 });
@@ -41,5 +45,5 @@ Route::group(
 //web route - point all requests to this view
 Route::get('/{any?}', function () {
     return view('app');
-})->where('any', '^(?!api|sanctum\/)[\/\w\.-]*')->middleware('web'); 
+})->where('any', '^(?!api|sanctum|view_file|download_file\/)[\/\w\.-]*')->middleware('web'); 
 
