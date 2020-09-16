@@ -29,7 +29,6 @@ class LayoutController extends Controller
     }
 
     public function primary_menu() {
-
         return $this->permission_filter(
             Section::with('routes')->whereNull('parent_id')->where('type','menu')->orderBY('sort_order')->get()
         );
@@ -37,7 +36,6 @@ class LayoutController extends Controller
     }
 
     public function secondary_menu() {
-
         $sections = $this->permission_filter(
             Section::with('routes')->whereNotNull('parent_id')->where('type','menu')->orderBY('parent_id')->orderBY('sort_order')->get()
         );
@@ -49,7 +47,7 @@ class LayoutController extends Controller
 
         if ($this->check_permissions) {
             $permissions = \User::get_permissions();
-            $sections->filter(function($record) use ($permissions) {
+            $sections = $sections->filter(function($record) use ($permissions) {
                 return !empty($permissions[$record->id]) && $permissions[$record->id] != 'none';
             });
         }

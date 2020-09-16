@@ -17,6 +17,8 @@ class OADController extends Controller
     public function index(Request $request)
     {
 
+        \User::checkAccess(get_class($this),['view','full']);
+
         //running builder from the trait
         $response = $this->listBuilder(
             new $this->model, //class
@@ -31,6 +33,8 @@ class OADController extends Controller
 
     public function show(Request $request)
     {
+
+        \User::checkAccess(get_class($this),['view','full']);
 
         $model = $request->hash ? $this->model::find($request->hash) : new $this->model;
 
@@ -55,6 +59,8 @@ class OADController extends Controller
 
     public function store(Request $request) {
 
+        \User::checkAccess(get_class($this),['full']);
+
         $model = $request->hash ? $this->model::where('hash',$request->hash)->first()  : new $this->model();
         
         $model->validateForm($request->forms)
@@ -63,6 +69,8 @@ class OADController extends Controller
     }
 
     public function destroy($hash) {
+
+        \User::checkAccess(get_class($this),'full');
 
         if ($this->model::destroy($hash)) {
             return response()->json(['status' => 'success', 'res' => 'Record deleted']);
@@ -91,12 +99,17 @@ class OADController extends Controller
     }
 
     public function export() {
+
+        \User::checkAccess(get_class($this),['view','full']);
+
         $modelName  = explode('\\',$this->model);
         $modelName  = end($modelName);
         $mPath      = 'App\\Exports\\' . $modelName . 'Export';
         $file_name  = $modelName . '-' . date('Y-m-d-h-i-s') . '.xlsx';
         Excel::store(new $mPath(), './tmp/' . $file_name);
+
         return $file_name;
+        
     }
 
 }

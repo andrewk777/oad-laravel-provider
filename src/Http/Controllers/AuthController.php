@@ -25,11 +25,11 @@ class AuthController extends Controller
 
     /**
      * Where to redirect users after login.
-     * 
+     *
      * @var string
      */
     protected $redirectTo = false;
- 
+
     /**
      * Create a new controller instance.
      *
@@ -50,11 +50,10 @@ class AuthController extends Controller
 
         }
 
-
         //delete all other device sessions for this user
         $user->tokens()->where('tokenable_id',$user->id)->delete();
 
-        auth()->login($user);
+        // auth()->login($user);
         $session = $user->createToken('device-session');
 
         return response()->json([ 

@@ -31,14 +31,16 @@ Route::group(
     [
         'prefix'        => 'api', 
         'middleware'    => ['api','auth:sanctum','OADSOFT\SPA\Http\Middleware\OADAuth'],
-        'namespace'     => 'App\Http\Controllers\OAD'
+        'namespace'     => 'App\Http\Controllers'
     ], function() {
         
-        Route::get('layout', 'LayoutController@full_menu');  
-        Route::post('file-upload', 'FileController@store');
-        Route::post('file-delete', 'FileController@delete');
-        Route::get('auth-check', 'AuthController@auth_check');
+        Route::get('layout', 'OAD\LayoutController@full_menu');  
+        Route::post('file-upload', 'OAD\FileController@store');
+        Route::post('file-delete', 'OAD\FileController@delete');
+        Route::get('auth-check', 'OAD\AuthController@auth_check');
 
+        //developers tools
+        Route::post('devtools/nav_menu/save', 'DEV\NavController@save');
 });
 
 

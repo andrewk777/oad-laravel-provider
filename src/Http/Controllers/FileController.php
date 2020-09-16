@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class FileController extends Controller {
 
     protected $model = 'App\Models\OAD\File';
+    protected $folder = '';
 
     public function show(Request $request) {
 
@@ -91,7 +92,13 @@ class FileController extends Controller {
 
     public function delete(Request $request) {
 
-        $this->model::find($request->hash)->delete();
+        $file = $this->model::find($request->hash)->delete();
+
+        //deleting physical file
+        \Storage::delete($file->path);
+
+        //setting is saved to 0
+        $file->delete();
 
         return response()->json([ 'status' => 'success', 'res' => 'File Has Been Deleted']);
 
