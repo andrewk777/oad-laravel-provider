@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
-use Auth, Hash, DB; 
+use Auth, Hash, DB;
 
 class AuthController extends Controller
 {
