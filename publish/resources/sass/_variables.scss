@@ -1,0 +1,56 @@
+// Body
+$body-bg: #f8fafc;
+
+//top-bar
+$tbHeight: 60px;
+
+//menu
+$menuWidth: 120px;
+$secMenuWidth: 250px;
+
+//content
+$contentPadding: 20px 30px 30px;
+$borderRadius: 5px;
+
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Bootstrap Colors
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+
+$primary: #42389d;
+$primary25t: #42389d40;
+$conentBgColor: #fff;
+$panelLoaderBg: #ffffffad;
+$panelLoaderColor: #42389d63;
+$menuFontColor: #b4c6fc;
+$hrColor: #dee2e6;
+$menuHoverFontColor: #f0f5ff;
+$menuHoverBgColor: #5145cd;
+$menuSelectedBgColor: #362f78;
+$componentAnimation: backendMount 0.8s;
+$formAnimationClose: formDismount 0.5s;
+$frontComponentAnimation: fadeIn 0.5s;
+
+$fieldBgColor: #f8f9fa;
+$fieldBorderRadius: 1px;
+$fieldHeight: 34px;
+
+$hoverBg: #42389da2;
+$hoverColor: #fff;
+
+$vs-state-active-bg: $hoverBg;
+$vs-state-active-color: $hoverColor;
+
+$fieldBorderColor: #ced4da;

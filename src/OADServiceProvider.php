@@ -13,7 +13,8 @@ class OADServiceProvider extends ServiceProvider {
 
         $this->publishes([
             __DIR__.'/../publish/Http/Controllers'      => app_path('Http/Controllers'),
-            __DIR__.'/../publish/Console'               => app_path('Console')
+            __DIR__.'/../publish/Console'               => app_path('Console'),
+            __DIR__.'/../publish/resources'             => app_path('resources')
         ]);
 
     }

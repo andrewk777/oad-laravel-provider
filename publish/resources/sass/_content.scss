@@ -1,0 +1,35 @@
+.content-wrap {
+    display: flex;
+    flex-direction: column;
+    padding-left: $menuWidth;
+    padding-top: $tbHeight;
+}
+.content {
+    flex-grow: 1;
+    padding: $contentPadding;
+    background-color: $conentBgColor
+}
+.panel-title-wrap {
+    padding-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid $hrColor;
+}
+.component-page {
+    position: absolute;
+    top: $tbHeight;
+    left: $menuWidth;
+    right: 0;
+    bottom: 0px;
+    padding: $contentPadding;
+    background-color: $conentBgColor;
+    z-index: 95;
+}
+.form-content {
+    position: relative;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+}
+.component-page form {
+     height: 100%;
+}
