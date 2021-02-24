@@ -109,7 +109,7 @@ class OADCommands extends Command
 
      private function genenv() {
         $json = file_get_contents(base_path('oad-conf.json'));
-        file_put_contents(base_path('.env'), View::make('console.env', json_decode($json,true )));
+        file_put_contents(base_path('.env'), View::make('console.env::oadsoft', json_decode($json,true )));
      }
 
      public function mkController() {
@@ -144,7 +144,7 @@ class OADCommands extends Command
         ];
         file_put_contents(
             app_path('Http/Controllers/' . $folder . $controller . '.php'),
-            '<?php' . PHP_EOL . View::make('console.controller', $params)
+            '<?php' . PHP_EOL . View::make('console.controller::oadsoft', $params)
         );
 
         if ($apiKey) {
@@ -189,7 +189,7 @@ class OADCommands extends Command
         ];
         file_put_contents(
             app_path('Models/' . $folder . $model_name . '.php'),
-            '<?php' . PHP_EOL . View::make('console.model', $params)
+            '<?php' . PHP_EOL . View::make('console.model::oadsoft', $params)
         );
 
         $this->info('Model ' . $folder . $model_name . ' created');
@@ -217,7 +217,7 @@ class OADCommands extends Command
             
         file_put_contents(
             $dir . $this->fileName . '.vue',
-            '<?php' . PHP_EOL . View::make('console.vueIndex', $params)
+            '<?php' . PHP_EOL . View::make('console.vueIndex::oadsoft', $params)
         );
 
         $this->info("Vue Index 'js/views/backend/{$this->path}{$this->fileName}.vue' created");
@@ -251,7 +251,7 @@ class OADCommands extends Command
 
         file_put_contents(
             $dir . $this->fileName . '.vue',
-            '<?php' . PHP_EOL . View::make('console.vueForm', $params)
+            '<?php' . PHP_EOL . View::make('console.vueForm::oadsoft', $params)
         );
 
         $this->info("Vue Form '@/views/backend/{$this->path}{$this->fileName}.vue' created");

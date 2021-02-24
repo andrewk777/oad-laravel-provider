@@ -96,7 +96,7 @@ class MkModule extends Command
         }
 
         if ($settings['create_model']) {
-	        file_put_contents(app_path('Models/' . $settings['model_name'] . '.php'), '<?php' . PHP_EOL . View::make('console.model', $settings));
+	        file_put_contents(app_path('Models/' . $settings['model_name'] . '.php'), '<?php' . PHP_EOL . View::make('console.model::oadsoft', $settings));
         }
 
         if ($settings['create_controller']) {
@@ -111,7 +111,7 @@ class MkModule extends Command
 
 			file_put_contents(
                 app_path('Http/Controllers/' . $settings['controller_folder'] . $settings['controller_name'] . '.php'),
-                '<?php' . PHP_EOL . View::make('console.controller', $settings)
+                '<?php' . PHP_EOL . View::make('console.controller::oadsoft', $settings)
             );
         }
 
@@ -154,11 +154,11 @@ class MkModule extends Command
 
             switch ($settings['vue_components_types']) {
                 case 'index_n_form':
-                    file_put_contents($app_path . $settings['vue_components_folder'] . $settings['vue_component_index_name'] . '.vue', View::make('console.vueIndex', $settings));
-                    file_put_contents($app_path . $settings['vue_components_folder'] . $settings['vue_component_form_name'] .'.vue', View::make('console.vueAE', $settings));
+                    file_put_contents($app_path . $settings['vue_components_folder'] . $settings['vue_component_index_name'] . '.vue', View::make('console.vueIndex::oadsoft', $settings));
+                    file_put_contents($app_path . $settings['vue_components_folder'] . $settings['vue_component_form_name'] .'.vue', View::make('console.vueAE::oadsoft', $settings));
                 break;
                 case 'just_form':
-                    file_put_contents($app_path . $settings['vue_components_folder'] . $settings['vue_component_form_name'] .'.vue', View::make('console.vueSingleForm', $settings));
+                    file_put_contents($app_path . $settings['vue_components_folder'] . $settings['vue_component_form_name'] .'.vue', View::make('console.vueSingleForm::oadsoft', $settings));
                 break;
             }
 
