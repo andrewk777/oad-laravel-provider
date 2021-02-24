@@ -14,6 +14,10 @@ class OADServiceProvider extends ServiceProvider {
         $this->loadViewsFrom(__DIR__.'/../publish/resources/views', 'oadsoft');
 
         $this->publishes([
+            __DIR__.'/../publish/resources/views' => resource_path('views/oadsoft'),
+        ]);
+
+        $this->publishes([
             __DIR__.'/../publish/Http/Controllers'      => app_path('Http/Controllers'),
             __DIR__.'/../publish/Console'               => app_path('Console')
         ]);
