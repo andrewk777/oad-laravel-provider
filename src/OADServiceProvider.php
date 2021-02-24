@@ -12,7 +12,8 @@ class OADServiceProvider extends ServiceProvider {
         $this->loadRoutesFrom(__DIR__.'/routes.php');      
 
         $this->publishes([
-            __DIR__.'/../publish/Http/Controllers'      => app_path('Http/Controllers')
+            __DIR__.'/../publish/Http/Controllers'      => app_path('Http/Controllers'),
+            __DIR__.'/../publish/Console'               => app_path('Console')
         ]);
 
     }
