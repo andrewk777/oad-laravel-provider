@@ -110,6 +110,7 @@ class OADCommands extends Command
      private function genenv() {
         $json = file_get_contents(base_path('oad-conf.json'));
         file_put_contents(base_path('.env'), View::make('oadsoft.console.env', json_decode($json,true )));
+        $this->info('Env Generated');
      }
 
      public function mkController() {
